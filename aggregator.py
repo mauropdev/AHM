@@ -37,7 +37,7 @@ def main():
         report = Report(
             period=period,
             values=[],
-            user=User.objects(email='jorlugaqui@gmail.com').first()
+            user=User.objects(email='mauricio@example.com').first()
         )
         report.save()
 
