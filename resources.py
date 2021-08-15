@@ -1,4 +1,5 @@
 from flask_restful import Resource, abort, reqparse
+from flasgger import swag_from
 from mongoengine.errors import NotUniqueError, ValidationError
 from werkzeug.exceptions import BadRequest, NotFound
 
@@ -14,6 +15,7 @@ class MeasurementDetail(Resource):
         self.reqparse.add_argument('pul', type=int, required=False, location='json')
         super(MeasurementDetail, self).__init__()
 
+    @swag_from('docs/measurement_detail.yml', methods=['GET'])
     def get(self, id):
         # import pdb; pdb.set_trace()
         try:
@@ -26,6 +28,7 @@ class MeasurementDetail(Resource):
         except Exception as e:
             abort(500, message=str(e))
 
+    @swag_from('docs/measurement_detail.yml', methods=['PATCH'])
     def patch(self, id):
         try:
             measurement = Measurement.objects(id=id).first()
@@ -55,6 +58,7 @@ class MeasurementList(Resource):
         self.reqparse.add_argument('pul', type=int, required=True, location='json')
         super(MeasurementList, self).__init__()
 
+    @swag_from('docs/measurement_list.yml', methods=['GET'])
     def get(self):
         try:
             data = [measurement.to_dict() for measurement in Measurement.objects]
@@ -62,6 +66,7 @@ class MeasurementList(Resource):
         except Exception as e:
             abort(500, message=str(e))
 
+    @swag_from('docs/measurement_list.yml', methods=['POST'])
     def post(self):
         try:
             data = self.reqparse.parse_args()
